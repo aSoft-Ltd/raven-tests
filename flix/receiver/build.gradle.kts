@@ -4,25 +4,28 @@ plugins {
     id("tz.co.asoft.library")
 }
 
-description = "An abstraction form sending emails"
-
 kotlin {
     jvm { library() }
-    js(IR) { library() }
+    js(IR) { library(testTimeout = 60000) }
 
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api(libs.koncurrent.later.core)
-                api(libs.kollections.interoperable)
-                api(libs.identifier.comm)
-                api(kotlinx.serialization.core)
+                api(libs.raven.flix.receiver)
+                api(libs.koncurrent.later.coroutines)
+                api(ktor.client.core)
             }
         }
 
         val commonTest by getting {
             dependencies {
                 implementation(libs.kommander.coroutines)
+            }
+        }
+
+        val jvmTest by getting {
+            dependencies {
+                implementation(ktor.client.cio)
             }
         }
     }
