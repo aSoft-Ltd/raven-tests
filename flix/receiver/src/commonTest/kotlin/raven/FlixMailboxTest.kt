@@ -22,7 +22,7 @@ class FlixMailboxTest {
 
     val mailer = FlixClientMailer(FlixClientMailerOptions(url, scope, HttpClient { }))
 
-    @Ignore
+//    @Ignore
     @Test
     fun should_be_able_to_receive_emails_in_the_flix_mailbox() = runTest {
         launch {
@@ -34,15 +34,15 @@ class FlixMailboxTest {
 
 
         repeat(5) {
-            mailer.send(EmailDraft("Test Email", "Test Email"), from = "andy@lamax.com", to = "john@doe.com")
+            mailer.send(EmailDraft("Test Email", "Test Email"), from = "andy@lamax.com", to = "john@doe.com").await()
         }
     }
 
-    @Ignore
+//    @Ignore
     @Test
     fun should_be_able_to_anticipate_a_single_mail() = runTest {
         val anticipatedMail = box.anticipate()
-        mailer.send(EmailDraft("Test Email", "Test anticipation"), from = "andy@lamax.com", to = "john@doe.com")
+        mailer.send(EmailDraft("Test Email", "Test anticipation"), from = "andy@lamax.com", to = "john@doe.com").await()
         val mail = anticipatedMail.await()
         expect(mail).toContain("anticipation")
     }
@@ -52,7 +52,7 @@ class FlixMailboxTest {
     fun should_be_able_to_anticipate_mail_multiple_mails() = runTest {
         repeat(10) {
             val anticipatedMail = box.anticipate()
-            mailer.send(EmailDraft("Test Email", "Test anticipation-$it"), from = "andy@lamax.com", to = "john@doe.com")
+            mailer.send(EmailDraft("Test Email", "Test anticipation-$it"), from = "andy@lamax.com", to = "john@doe.com").await()
             val mail = anticipatedMail.await()
             expect(mail).toContain("anticipation-$it")
         }
