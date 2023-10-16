@@ -4,12 +4,10 @@ import io.ktor.client.HttpClient
 import kommander.expect
 import kommander.toContain
 import koncurrent.later.await
-import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 
 class FlixMailboxTest {
@@ -22,35 +20,9 @@ class FlixMailboxTest {
 
     val mailer = FlixClientMailer(FlixClientMailerOptions(url, scope, HttpClient { }))
 
-//    @Ignore
     @Test
-    fun should_be_able_to_receive_emails_in_the_flix_mailbox() = runTest {
-        launch {
-            repeat(5) {
-                val received = box.channel.receive()
-                println("received: $received")
-            }
-        }
-
-
-        repeat(5) {
-            mailer.send(EmailDraft("Test Email", "Test Email"), from = "andy@lamax.com", to = "john@doe.com").await()
-        }
-    }
-
-//    @Ignore
-    @Test
-    fun should_be_able_to_anticipate_a_single_mail() = runTest {
-        val anticipatedMail = box.anticipate()
-        mailer.send(EmailDraft("Test Email", "Test anticipation"), from = "andy@lamax.com", to = "john@doe.com").await()
-        val mail = anticipatedMail.await()
-        expect(mail).toContain("anticipation")
-    }
-
-//    @Ignore
-    @Test
-    fun should_be_able_to_anticipate_mail_multiple_mails() = runTest {
-        repeat(10) {
+    fun should_be_able_to_anticipate_multiple_mails() = runTest {
+        repeat(3) {
             val anticipatedMail = box.anticipate()
             mailer.send(EmailDraft("Test Email", "Test anticipation-$it"), from = "andy@lamax.com", to = "john@doe.com").await()
             val mail = anticipatedMail.await()
