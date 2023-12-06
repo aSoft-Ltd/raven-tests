@@ -11,7 +11,7 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                api(libs.raven.flix.receiver)
+                api(libs.raven.bus)
                 api(libs.koncurrent.later.coroutines)
                 api(ktor.client.core)
             }
